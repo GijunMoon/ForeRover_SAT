@@ -1,16 +1,25 @@
 const int analogPin = A0; // 전압 분배기에서 들어오는 아날로그 핀
-const float R1 = 100000.0; // 전압 분배기의 첫 번째 저항 (단위: Ω)
-const float R2 = 100000.0; // 전압 분배기의 두 번째 저항 (단위: Ω)
+const float R1 = 10000.0; // 전압 분배기의 첫 번째 저항 (단위: Ω)
+const float R2 = 10000.0; // 전압 분배기의 두 번째 저항 (단위: Ω)
 const float referenceVoltage = 5.0; // 아두이노의 참조 전압 (단위: V)
+const int numSamples = 20; // 이동 평균 필터에 사용할 샘플 수
 
 void setup() {
   Serial.begin(9600); // 시리얼 통신 시작
 }
 
 void loop() {
-  int sensorValue = analogRead(analogPin); // 아날로그 핀에서 값 읽기
-  float voltage = sensorValue * (referenceVoltage / 1023.0); // 센서 값을 전압으로 변환
-  float batteryVoltage = voltage * ((R1 + R2) / R2); // 실제 배터리 전압 계산
+  float voltageSum = 0;
+  
+  for (int i = 0; i < numSamples; i++) {
+    int sensorValue = analogRead(analogPin); // 아날로그 핀에서 값 읽기
+    float voltage = sensorValue * (referenceVoltage / 1023.0); // 센서 값을 전압으로 변환
+    voltageSum += voltage;
+    delay(10); // 샘플링 간 약간의 딜레이
+  }
+  
+  float averageVoltage = voltageSum / numSamples;
+  float batteryVoltage = averageVoltage * ((R1 + R2) / R2); // 실제 배터리 전압 계산
 
   float batteryLevel = getBatteryLevel(batteryVoltage);
 
