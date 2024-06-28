@@ -5,6 +5,10 @@
 
 #include "main.h"
 #include "motor.h"
+#include "bluetooth.h"
+
+#define RXD 0
+#define TXD 1
 
 // 핀 설정
 #define ENA 9    // 모터 A 속도 제어 핀

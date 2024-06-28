@@ -1,13 +1,14 @@
 #include "global.h"
 #include <SoftwareSerial.h>
+#include <Arduino.h>
 
-SoftwareSerial bluetooth(RXD, TXD)
+SoftwareSerial bluetooth(RXD, TXD);
 
-void setup_(){
+void setup_ble(){
     bluetooth.begin(9600);
 }
 
-void loop_(){
+void loop_ble(){
     if (bluetooth.available()){
         Serial.write(bluetooth.read());
     }

@@ -3,5 +3,7 @@
 
 void setup_();
 void loop_();
+void forward();
+void backward();
 
 #endif

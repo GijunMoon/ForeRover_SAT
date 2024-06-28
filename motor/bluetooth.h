@@ -1,7 +1,7 @@
 #ifndef bluetooth_h
 #define bluetooth_h
 
-void setup_();
-void loop_();
+void setup_ble();
+void loop_ble();
 
 #endif
