@@ -19,13 +19,15 @@ class BatteryMonitorApp(QtWidgets.QWidget):
         self.initUI()
         self.x_data = []
         self.y_data_voltage = []
+        self.last_voltage = None  # 마지막 전압 값을 저장할 변수
+        self.last_change_time = None  # 마지막 전압 변화 시간을 저장할 변수
         self.start_time = time.time()
         self.update_timer = QtCore.QTimer()
         self.update_timer.timeout.connect(self.update_graph)
         self.update_timer.start(1000)  # 1초마다 업데이트
 
     def initUI(self):
-        self.setWindowTitle('ForeRover_SAT Control Panel')
+        self.setWindowTitle('Battery Monitor')
 
         main_layout = QtWidgets.QVBoxLayout()
 
@@ -51,6 +53,10 @@ class BatteryMonitorApp(QtWidgets.QWidget):
         # 명령 표시 레이블
         self.command_label = QtWidgets.QLabel('Current Command: None')
         main_layout.addWidget(self.command_label)
+
+        # 전압 변화 시간 표시 레이블
+        self.change_time_label = QtWidgets.QLabel('Last Voltage Change Time: None')
+        main_layout.addWidget(self.change_time_label)
 
         # 그래프 추가
         self.fig, self.ax = plt.subplots()
@@ -105,6 +111,13 @@ class BatteryMonitorApp(QtWidgets.QWidget):
             current_time = time.time() - self.start_time
             self.x_data.append(current_time)
             self.y_data_voltage.append(battery_voltage)
+
+            # 전압 변화 감지
+            if self.last_voltage is not None and self.last_voltage != battery_voltage:
+                self.last_change_time = current_time
+                self.change_time_label.setText(f'전압 변화 시간: {current_time:.2f} s')
+
+            self.last_voltage = battery_voltage
 
             # 그래프 업데이트
             self.ax.clear()
