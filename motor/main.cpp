@@ -15,19 +15,31 @@ void loop_() {
         command.trim(); // 공백 제거
     
     // 명령에 따른 동작 수행
-    if (command == "F") {
+    if (command == "전진") {
         forward();
-        Serial.println("전진!");
-    } else if (command == "B") {
+        Serial.println("전진");
+    } else if (command == "후진") {
         backward();
-        Serial.println("후진!");
+        Serial.println("후진");
     } else {
         Serial.println("Unknown command. Please use F or B.");
     }
-    if (command == "S"){
+    if (command == "정지"){
         motorStop();
         Serial.println("정지");
     }
+    if (command == "좌측")
+    {
+        motorABackward(200);
+        motorBForward(255);
+    }
+    if (command == "우측")
+    {
+        motorAForward(255);
+        motorBBackward(200);
+    }
+    
+    
   }
     //motorAForward(255); // 모터 A를 최고 속도로 전진
     //delay(2000);       // 2초 대기
