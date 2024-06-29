@@ -24,6 +24,10 @@ void loop_() {
     } else {
         Serial.println("Unknown command. Please use F or B.");
     }
+    if (command == "S"){
+        motorStop();
+        Serial.println("정지");
+    }
   }
     //motorAForward(255); // 모터 A를 최고 속도로 전진
     //delay(2000);       // 2초 대기

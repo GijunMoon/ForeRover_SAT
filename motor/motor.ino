@@ -4,10 +4,12 @@
 
 void setup() 
 {
-  setup_();
+  //setup_();
+  setup_ble();
 }
 
 void loop() 
 {
-  loop_();
+  //loop_();
+  loop_ble();
 }

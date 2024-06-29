@@ -1,5 +1,5 @@
 {
     "board": "arduino:avr:uno",
-    "sketch": "remote.ino",
+    "sketch": "motor\\motor.ino",
     "port": "COM13"
 }

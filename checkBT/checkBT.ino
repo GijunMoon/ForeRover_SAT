@@ -1,8 +1,7 @@
-const int analogPin = A0; // 전압 분배기에서 들어오는 아날로그 핀
-const float R1 = 10000.0; // 전압 분배기의 첫 번째 저항 (단위: Ω)
-const float R2 = 10000.0; // 전압 분배기의 두 번째 저항 (단위: Ω)
-const float referenceVoltage = 5.0; // 아두이노의 참조 전압 (단위: V)
-const int numSamples = 20; // 이동 평균 필터에 사용할 샘플 수
+const int analogPin = A0; // 아날로그 핀 설정
+const float R1 = 10000.0; // 저항 R1의 값 (10k ohms)
+const float R2 = 10000.0; // 저항 R2의 값 (10k ohms)
+const int numSamples = 10;
 
 void setup() {
   Serial.begin(9600); // 시리얼 통신 시작
@@ -10,36 +9,27 @@ void setup() {
 
 void loop() {
   float voltageSum = 0;
-  
   for (int i = 0; i < numSamples; i++) {
-    int sensorValue = analogRead(analogPin); // 아날로그 핀에서 값 읽기
-    float voltage = sensorValue * (referenceVoltage / 1023.0); // 센서 값을 전압으로 변환
+    int analogValue = analogRead(analogPin); // 아날로그 핀 값 읽기
+    float voltage = (analogValue / 1023.0) * 5.0; // 아날로그 값을 전압으로 변환
     voltageSum += voltage;
-    delay(10); // 샘플링 간 약간의 딜레이
+    delay(10); // 샘플 간 딜레이
   }
-  
+
   float averageVoltage = voltageSum / numSamples;
   float batteryVoltage = averageVoltage * ((R1 + R2) / R2); // 실제 배터리 전압 계산
-
   float batteryLevel = getBatteryLevel(batteryVoltage);
 
-  Serial.print("Battery Voltage: ");
   Serial.print(batteryVoltage);
-  Serial.print(" V, Battery Level: ");
-  Serial.print(batteryLevel);
-  Serial.println(" %");
-
+  Serial.print(" ");
+  Serial.println(batteryLevel);
   delay(1000); // 1초 대기
 }
 
 float getBatteryLevel(float voltage) {
-  float minVoltage = 6.0; // 최소 전압 (방전 상태)
-  float maxVoltage = 8.4; // 최대 전압 (완전 충전 상태)
-
-  // 전압 범위를 잔량 퍼센트로 변환
-  float batteryLevel = ((voltage - minVoltage) / (maxVoltage - minVoltage)) * 100.0;
-  if (batteryLevel < 0) batteryLevel = 0;
-  if (batteryLevel > 100) batteryLevel = 100;
-
-  return batteryLevel;
+  float minVoltage = 3.0;
+  float maxVoltage = 4.2;
+  if (voltage < minVoltage) return 0;
+  if (voltage > maxVoltage) return 100;
+  return (voltage - minVoltage) / (maxVoltage - minVoltage) * 100;
 }
