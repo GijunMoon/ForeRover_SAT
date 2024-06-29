@@ -1,4 +1,4 @@
-const int analogPin = A0; // 아날로그 핀 설정
+const int analogPin = A5; // 아날로그 핀 설정
 const float R1 = 10000.0; // 저항 R1의 값 (10k ohms)
 const float R2 = 10000.0; // 저항 R2의 값 (10k ohms)
 const int numSamples = 10;
@@ -27,8 +27,8 @@ void loop() {
 }
 
 float getBatteryLevel(float voltage) {
-  float minVoltage = 3.0;
-  float maxVoltage = 4.2;
+  float minVoltage = 6.0;
+  float maxVoltage = 8.4;
   if (voltage < minVoltage) return 0;
   if (voltage > maxVoltage) return 100;
   return (voltage - minVoltage) / (maxVoltage - minVoltage) * 100;
